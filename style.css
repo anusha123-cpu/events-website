@@ -56,3 +56,15 @@ button:hover {
   border-radius: 10px;
   cursor: pointer;
 }
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  z-index: 10;        /* Ensure clickable */
+  pointer-events: auto; /* Allow clicks */
+}
+button:hover {
+  background: #0056b3;
+}

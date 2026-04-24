@@ -71,3 +71,39 @@ function loadEvents() {
     });
   });
 }
+document.addEventListener("DOMContentLoaded", () => {
+  // Attach listener to static button
+  const eventsBtn = document.getElementById("eventsBtn");
+  if (eventsBtn) {
+    eventsBtn.addEventListener("click", () => {
+      alert("Events button clicked!");
+      // Example: navigate to events page
+      window.location.href = "events.html";
+    });
+  }
+
+  // Event delegation for dynamically rendered buttons
+  const eventsDiv = document.getElementById("events");
+  if (eventsDiv) {
+    eventsDiv.addEventListener("click", (e) => {
+      if (e.target && e.target.matches("button.registerBtn")) {
+        const eventId = e.target.dataset.id;
+        registerEvent(eventId);
+      }
+    });
+  }
+});
+
+// Example dynamic rendering with proper class
+function loadEvents() {
+  db.collection("events").orderBy("date").onSnapshot(snapshot => {
+    const eventsDiv = document.getElementById("events");
+    eventsDiv.innerHTML = "";
+    snapshot.forEach(doc => {
+      const e = doc.data();
+      eventsDiv.innerHTML += `
+        <p>${e.title} - ${e.date}
+        <button class="registerBtn" data-id="${doc.id}">Register</button></p>`;
+    });
+  });
+}

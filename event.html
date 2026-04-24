@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Register</title>
+  <title>Event System</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,10 +17,57 @@
 
 <button onclick="register()">Submit</button>
 
+<hr>
+
+<h2>Events</h2>
+<div id="events"></div>
+
+<button id="eventsBtn">Load Events</button>
+
+<!-- Firebase (USE ONE VERSION ONLY - v8 for simplicity) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-<script src="script.js"></script>
+<script>
+  // Firebase config (replace with yours)
+  const firebaseConfig = {
+    apiKey: "YOUR_KEY",
+    authDomain: "YOUR_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // REGISTER FUNCTION
+  function register() {
+    db.collection("registrations").add({
+      name: document.getElementById("name").value,
+      usn: document.getElementById("usn").value,
+      team: document.getElementById("team").value,
+      members: document.getElementById("members").value,
+      branch: document.getElementById("branch").value,
+      section: document.getElementById("section").value
+    });
+
+    alert("Registered Successfully!");
+  }
+
+  // EVENTS BUTTON CLICK FIX
+  document.getElementById("eventsBtn").addEventListener("click", function () {
+    const eventsDiv = document.getElementById("events");
+    eventsDiv.innerHTML = `
+      <div class="card">
+        <h3>Hackathon</h3>
+        <p>Date: 30 April</p>
+      </div>
+      <div class="card">
+        <h3>Ideathon</h3>
+        <p>Date: 5 May</p>
+      </div>
+    `;
+  });
+</script>
 
 </body>
 </html>
