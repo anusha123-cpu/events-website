@@ -1,91 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Events</title>
-  <style>
-    body { font-family: Arial; text-align: center; }
-    .tabs button {
-      padding: 10px;
-      margin: 5px;
-      cursor: pointer;
-    }
-    .event {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px;
-      border-radius: 10px;
-    }
-    .hidden { display: none; }
-  </style>
+  <title>Event Portal</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h1>Events</h1>
+<h2>Login</h2>
 
-<div class="tabs">
-  <button onclick="showEvents('past')">Past</button>
-  <button onclick="showEvents('present')">Present</button>
-  <button onclick="showEvents('upcoming')">Upcoming</button>
+<input id="email" placeholder="Email"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+
+<button onclick="signup()">Sign Up</button>
+<button onclick="login()">Login</button>
+<button onclick="logout()">Logout</button>
+
+<p id="status"></p>
+
+<hr>
+
+<div id="adminPanel" style="display:none;">
+  <h2>Add Event (Admin)</h2>
+  <input id="eventName" placeholder="Event Name">
+  <input id="eventDate" type="date">
+  <button onclick="addEvent()">Add Event</button>
 </div>
 
-<div id="past"></div>
-<div id="present" class="hidden"></div>
-<div id="upcoming" class="hidden"></div>
+<hr>
 
-<script>
-const events = [
-  { name: "Hackathon", date: "2026-05-01" },
-  { name: "Workshop", date: "2026-04-24" },
-  { name: "Tech Fest", date: "2026-04-20" }
-];
+<h2>Events</h2>
+<div id="events"></div>
 
-function categorizeEvents() {
-  const today = new Date();
+<!-- Firebase (use ONLY ONE version → v9) -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 
-  let past = [], present = [], upcoming = [];
-
-  events.forEach(e => {
-    let eventDate = new Date(e.date);
-
-    if (eventDate.toDateString() === today.toDateString()) {
-      present.push(e);
-    } else if (eventDate < today) {
-      past.push(e);
-    } else {
-      upcoming.push(e);
-    }
-  });
-
-  displayEvents("past", past);
-  displayEvents("present", present);
-  displayEvents("upcoming", upcoming);
-}
-
-function displayEvents(id, list) {
-  const container = document.getElementById(id);
-  container.innerHTML = "";
-
-  list.forEach(e => {
-    container.innerHTML += `
-      <div class="event">
-        <h3>${e.name}</h3>
-        <p>${e.date}</p>
-      </div>
-    `;
-  });
-}
-
-function showEvents(type) {
-  document.getElementById("past").classList.add("hidden");
-  document.getElementById("present").classList.add("hidden");
-  document.getElementById("upcoming").classList.add("hidden");
-
-  document.getElementById(type).classList.remove("hidden");
-}
-
-categorizeEvents();
-</script>
+<!-- Your JS -->
+<script src="script.js"></script>
 
 </body>
 </html>
