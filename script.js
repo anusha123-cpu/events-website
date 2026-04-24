@@ -30,6 +30,13 @@ function logout() {
 
 // LOAD EVENTS
 function loadEvents() {
+    console.log("Events loading...");
+    html += `
+  <div class="card" onclick="openEvent('${e.name.replace(/'/g, "\\'")}')">
+    <h3>${e.name}</h3>
+    <p>${e.date}</p>
+  </div>
+`;
     
   db.collection("events").onSnapshot(snapshot => {
     let html = "";
@@ -51,6 +58,10 @@ function loadEvents() {
 
 // OPEN EVENT
 function openEvent(name) {
+  console.log("Clicked:", name); // 👈 debug
+  localStorage.setItem("event", name);
+  window.location.href = "event.html";
+}
   localStorage.setItem("event", name);
   window.location.href = "event.html";
 }
