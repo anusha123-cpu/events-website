@@ -1,7 +1,7 @@
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_PROJECT_ID"
+  apiKey: "AIzaSyAlKTvhP2_xiNTxalQnzlazWvXlnUa6i6A",
+  authDomain: "moneyplant-35a61.firebaseapp.com",
+  projectId: "moneyplant-35a61"
 };
 
 firebase.initializeApp(firebaseConfig);
