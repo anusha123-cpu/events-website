@@ -1,8 +1,7 @@
-// 🔥 Firebase Config
 const firebaseConfig = {
-  apiKey: "AIzaSyAlKTvhP2_xiNTxalQnzlazWvXlnUa6i6A",
-  authDomain: "moneyplant-35a61.firebaseapp.com",
-  projectId: "moneyplant-35a61"
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -10,76 +9,43 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// 👑 ADMIN EMAIL
-const adminEmail = "your-email@gmail.com";
-
 // LOGIN
 function login() {
-  auth.signInWithEmailAndPassword(getEmail(), getPassword())
-    .then(() => {
-      window.location.href = "home.html"; // ✅ THIS LINE DOES NAVIGATION
-    })
+  auth.signInWithEmailAndPassword(getEmail(), getPass())
+    .then(() => window.location.href = "home.html")
     .catch(e => setStatus(e.message));
 }
 
 // SIGNUP
 function signup() {
-  auth.createUserWithEmailAndPassword(getEmail(), getPassword())
-    .then(() => setStatus("User created"))
+  auth.createUserWithEmailAndPassword(getEmail(), getPass())
+    .then(() => setStatus("Account created"))
     .catch(e => setStatus(e.message));
 }
 
 // LOGOUT
 function logout() {
-  auth.signOut().then(() => {
-    window.location.href = "index.html";
-  });
-}
-
-// NAVIGATION
-function goAdmin() {
-  const user = auth.currentUser;
-  if (user && user.email === adminEmail) {
-    window.location.href = "admin.html";
-  } else {
-    alert("Access denied");
-  }
-}
-
-// ADD EVENT
-function addEvent() {
-  db.collection("events").add({
-    name: document.getElementById("eventName").value,
-    date: document.getElementById("eventDate").value,
-    type: document.getElementById("eventType").value
-  });
-
-  alert("Event added");
+  auth.signOut().then(() => window.location.href = "index.html");
 }
 
 // LOAD EVENTS
 function loadEvents() {
+    
   db.collection("events").onSnapshot(snapshot => {
-    let u="", p="", pa="";
+    let html = "";
 
     snapshot.forEach(doc => {
       const e = doc.data();
 
-      const card = `
-        <div onclick="openEvent('${e.name}')">
+      html += `
+        <div class="card" onclick="openEvent('${e.name}')">
           <h3>${e.name}</h3>
           <p>${e.date}</p>
         </div>
       `;
-
-      if (e.type==="upcoming") u+=card;
-      if (e.type==="present") p+=card;
-      if (e.type==="past") pa+=card;
     });
 
-    if(document.getElementById("upcoming")) document.getElementById("upcoming").innerHTML=u;
-    if(document.getElementById("present")) document.getElementById("present").innerHTML=p;
-    if(document.getElementById("past")) document.getElementById("past").innerHTML=pa;
+    document.getElementById("events").innerHTML = html;
   });
 }
 
@@ -90,34 +56,38 @@ function openEvent(name) {
 }
 
 // REGISTER
-function submitRegistration() {
-  const event = localStorage.getItem("event");
-
+function register() {
   db.collection("registrations").add({
-    event: event,
-    name: document.getElementById("name").value,
-    usn: document.getElementById("usn").value,
-    phone: document.getElementById("phone").value
+    event: localStorage.getItem("event"),
+    name: val("name"),
+    usn: val("usn"),
+    team: val("team"),
+    members: val("members"),
+    branch: val("branch"),
+    section: val("section")
   });
 
-  alert("Registered!");
+  alert("Registered successfully!");
 }
 
 // HELPERS
 function getEmail() {
-  return document.getElementById("email")?.value;
+  return document.getElementById("email").value;
 }
 
-function getPassword() {
-  return document.getElementById("password")?.value;
+function getPass() {
+  return document.getElementById("password").value;
+}
+
+function val(id) {
+  return document.getElementById(id).value;
 }
 
 function setStatus(msg) {
-  if(document.getElementById("status"))
-    document.getElementById("status").innerText = msg;
+  document.getElementById("status").innerText = msg;
 }
 
-// AUTO LOAD EVENTS
+// AUTO LOAD
 if (window.location.pathname.includes("home.html")) {
   loadEvents();
 }

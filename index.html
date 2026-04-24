@@ -1,25 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Money Plant Club - Login</title>
+  <title>Money Plant Club</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-<h1>🌱 Money Plant Club</h1>
-<p>Grow your knowledge. Multiply your future.</p>
+<body class="login-page">
 
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+<div class="overlay">
 
-<button onclick="signup()">Sign Up</button>
-<button onclick="login()">Login</button>
+  <img src="logo.png" class="logo">
 
-<p id="status"></p>
+  <h1>Money Plant Club</h1>
+  <p class="tagline">Cultivate Wealth • Grow Knowledge • Build Future</p>
 
+  <div class="login-box">
+    <input id="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+
+    <button onclick="signup()">Sign Up</button>
+    <button onclick="login()">Login</button>
+
+    <p id="status"></p>
+  </div>
+
+</div>
+
+<!-- Firebase v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
 <script src="script.js"></script>
 
 </body>
