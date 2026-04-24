@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Money Plant Club - Login</title>
+  <title>Home</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h1>🌱 Money Plant Club</h1>
-<p>Grow your knowledge. Multiply your future.</p>
 
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+<button onclick="goAdmin()">Admin Panel</button>
+<button onclick="logout()">Logout</button>
 
-<button onclick="signup()">Sign Up</button>
-<button onclick="login()">Login</button>
+<h2>Upcoming Events</h2>
+<div id="upcoming"></div>
 
-<p id="status"></p>
+<h2>Present Events</h2>
+<div id="present"></div>
+
+<h2>Past Events</h2>
+<div id="past"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
