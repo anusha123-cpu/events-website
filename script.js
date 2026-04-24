@@ -1,4 +1,4 @@
-// 🔥 PASTE YOUR FIREBASE CONFIG HERE
+// 🔥 Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAlKTvhP2_xiNTxalQnzlazWvXlnUa6i6A",
   authDomain: "moneyplant-35a61.firebaseapp.com",
@@ -6,38 +6,44 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// 👑 ADMIN EMAIL
-const adminEmail = "your-email@gmail.com";
+// 👑 ADMIN EMAIL (PUT YOUR REAL EMAIL)
+const adminEmail = "your-real-email@gmail.com";
 
-// AUTH
+// AUTH FUNCTIONS
 function signup() {
   auth.createUserWithEmailAndPassword(email(), pass())
-    .then(() => setStatus("User created"))
+    .then(() => setStatus("User created ✅"))
     .catch(e => setStatus(e.message));
 }
 
 function login() {
   auth.signInWithEmailAndPassword(email(), pass())
-    .then(() => setStatus("Logged in"))
+    .then(() => setStatus("Logged in ✅"))
     .catch(e => setStatus(e.message));
 }
 
 function logout() {
   auth.signOut();
+  setStatus("Logged out ❌");
 }
 
+// AUTH STATE
 auth.onAuthStateChanged(user => {
   if (user) {
     setStatus("Welcome " + user.email);
 
+    // Show admin panel only for admin
     if (user.email === adminEmail) {
       document.getElementById("adminPanel").style.display = "block";
     }
 
     loadEvents();
+  } else {
+    document.getElementById("adminPanel").style.display = "none";
   }
 });
 
@@ -47,6 +53,8 @@ function addEvent() {
     name: document.getElementById("eventName").value,
     date: document.getElementById("eventDate").value
   });
+
+  alert("Event added!");
 }
 
 // LOAD EVENTS
@@ -70,16 +78,21 @@ function loadEvents() {
   });
 }
 
-// REGISTER
+// REGISTER EVENT
 function registerEvent(eventName) {
   const user = auth.currentUser;
+
+  if (!user) {
+    alert("Please login first!");
+    return;
+  }
 
   db.collection("registrations").add({
     user: user.email,
     event: eventName
   });
 
-  alert("Registered!");
+  alert("Registered successfully!");
 }
 
 // HELPERS
@@ -88,7 +101,7 @@ function email() {
 }
 
 function pass() {
-  return document.getElementById("password").value;
+  return document.getElementById("password").value; // ✅ FIXED
 }
 
 function setStatus(msg) {
