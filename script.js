@@ -1,3 +1,4 @@
+// 🔥 PASTE YOUR FIREBASE CONFIG HERE
 const firebaseConfig = {
   apiKey: "AIzaSyAlKTvhP2_xiNTxalQnzlazWvXlnUa6i6A",
   authDomain: "moneyplant-35a61.firebaseapp.com",
@@ -7,94 +8,89 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-};
-firebase.initializeApp(firebaseConfig);
 
-const auth = firebase.auth();
-const db = firebase.firestore();
+// 👑 ADMIN EMAIL
+const adminEmail = "your-email@gmail.com";
 
+// AUTH
 function signup() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(() => setStatus("User created ✅"))
-    .catch(err => setStatus(err.message));
+  auth.createUserWithEmailAndPassword(email(), pass())
+    .then(() => setStatus("User created"))
+    .catch(e => setStatus(e.message));
 }
 
 function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => setStatus("Logged in ✅"))
-    .catch(err => setStatus(err.message));
+  auth.signInWithEmailAndPassword(email(), pass())
+    .then(() => setStatus("Logged in"))
+    .catch(e => setStatus(e.message));
 }
 
 function logout() {
   auth.signOut();
-  setStatus("Logged out ❌");
+}
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    setStatus("Welcome " + user.email);
+
+    if (user.email === adminEmail) {
+      document.getElementById("adminPanel").style.display = "block";
+    }
+
+    loadEvents();
+  }
+});
+
+// ADD EVENT
+function addEvent() {
+  db.collection("events").add({
+    name: document.getElementById("eventName").value,
+    date: document.getElementById("eventDate").value
+  });
+}
+
+// LOAD EVENTS
+function loadEvents() {
+  db.collection("events").onSnapshot(snapshot => {
+    let html = "";
+
+    snapshot.forEach(doc => {
+      const e = doc.data();
+
+      html += `
+        <div>
+          <h3>${e.name}</h3>
+          <p>${e.date}</p>
+          <button onclick="registerEvent('${e.name}')">Register</button>
+        </div>
+      `;
+    });
+
+    document.getElementById("events").innerHTML = html;
+  });
+}
+
+// REGISTER
+function registerEvent(eventName) {
+  const user = auth.currentUser;
+
+  db.collection("registrations").add({
+    user: user.email,
+    event: eventName
+  });
+
+  alert("Registered!");
+}
+
+// HELPERS
+function email() {
+  return document.getElementById("email").value;
+}
+
+function pass() {
+  return document.getElementById("password").value;
 }
 
 function setStatus(msg) {
   document.getElementById("status").innerText = msg;
-}
-function signup() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(() => alert("Signup successful"))
-    .catch(err => alert(err.message));
-}
-
-// Login
-function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => window.location = "events.html")
-    .catch(err => alert(err.message));
-}
-
-// Add Event (Admin only)
-function addEvent() {
-  const user = auth.currentUser;
-  if (user && user.email === "admin@example.com") { // simple admin check
-    const title = document.getElementById("title").value;
-    const date = document.getElementById("date").value;
-    db.collection("events").add({ title, date })
-      .then(() => alert("Event added"));
-  } else {
-    alert("Only admin can add events");
-  }
-}
-
-// Load Events
-if (document.getElementById("events")) {
-  db.collection("events").orderBy("date").onSnapshot(snapshot => {
-    const eventsDiv = document.getElementById("events");
-    eventsDiv.innerHTML = "";
-    snapshot.forEach(doc => {
-      const e = doc.data();
-      const btn = `<button onclick="registerEvent('${doc.id}')">Register</button>`;
-      eventsDiv.innerHTML += `<p>${e.title} - ${e.date} ${btn}</p>`;
-    });
-  });
-}
-
-// Register for Event
-function registerEvent(eventId) {
-  const user = auth.currentUser;
-  if (user) {
-    db.collection("registrations").add({
-      eventId,
-      userId: user.uid
-    }).then(() => alert("Registered successfully"));
-  } else {
-    alert("Please login first");
-  }
 }

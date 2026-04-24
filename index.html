@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Event Portal</title>
+  <title>Money Plant Club</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Login</h2>
+<div class="container">
 
-<input id="email" placeholder="Email"><br><br>
-<input id="password" type="password" placeholder="Password"><br><br>
+  <h1>🌱 Money Plant Club</h1>
+  <p class="tagline">Grow your knowledge. Multiply your future.</p>
 
-<button onclick="signup()">Sign Up</button>
-<button onclick="login()">Login</button>
-<button onclick="logout()">Logout</button>
+  <!-- LOGIN -->
+  <div class="login-box">
+    <input id="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
 
-<p id="status"></p>
+    <button onclick="signup()">Sign Up</button>
+    <button onclick="login()">Login</button>
+    <button onclick="logout()">Logout</button>
 
-<hr>
+    <p id="status"></p>
+  </div>
 
-<div id="adminPanel" style="display:none;">
-  <h2>Add Event (Admin)</h2>
-  <input id="eventName" placeholder="Event Name">
-  <input id="eventDate" type="date">
-  <button onclick="addEvent()">Add Event</button>
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" style="display:none;">
+    <h2>Add Event</h2>
+    <input id="eventName" placeholder="Event Name">
+    <input id="eventDate" type="date">
+    <button onclick="addEvent()">Add Event</button>
+  </div>
+
+  <!-- EVENTS -->
+  <h2>Events</h2>
+  <div id="events"></div>
+
 </div>
 
-<hr>
-
-<h2>Events</h2>
-<div id="events"></div>
-
-<!-- Firebase (use ONLY ONE version → v9) -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 
-<!-- Your JS -->
 <script src="script.js"></script>
 
 </body>
