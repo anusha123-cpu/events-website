@@ -1,4 +1,4 @@
-// 🔥 Firebase Config
+// 🔥 Firebase Config (your real one)
 const firebaseConfig = {
   apiKey: "AIzaSyAlKTvhP2_xiNTxalQnzlazWvXlnUa6i6A",
   authDomain: "moneyplant-35a61.firebaseapp.com",
@@ -10,22 +10,24 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// 👑 ADMIN EMAIL (PUT YOUR REAL EMAIL)
-const adminEmail = "your-real-email@gmail.com";
+// 👑 ADMIN EMAIL (PUT YOUR EMAIL HERE)
+const adminEmail = "yourrealemail@gmail.com";
 
-// AUTH FUNCTIONS
+// SIGNUP
 function signup() {
-  auth.createUserWithEmailAndPassword(email(), pass())
+  auth.createUserWithEmailAndPassword(getEmail(), getPassword())
     .then(() => setStatus("User created ✅"))
     .catch(e => setStatus(e.message));
 }
 
+// LOGIN
 function login() {
-  auth.signInWithEmailAndPassword(email(), pass())
+  auth.signInWithEmailAndPassword(getEmail(), getPassword())
     .then(() => setStatus("Logged in ✅"))
     .catch(e => setStatus(e.message));
 }
 
+// LOGOUT
 function logout() {
   auth.signOut();
   setStatus("Logged out ❌");
@@ -36,7 +38,6 @@ auth.onAuthStateChanged(user => {
   if (user) {
     setStatus("Welcome " + user.email);
 
-    // Show admin panel only for admin
     if (user.email === adminEmail) {
       document.getElementById("adminPanel").style.display = "block";
     }
@@ -47,11 +48,14 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-// ADD EVENT
+// ADD EVENT (ADMIN)
 function addEvent() {
+  const name = document.getElementById("eventName").value;
+  const date = document.getElementById("eventDate").value;
+
   db.collection("events").add({
-    name: document.getElementById("eventName").value,
-    date: document.getElementById("eventDate").value
+    name: name,
+    date: date
   });
 
   alert("Event added!");
@@ -96,12 +100,12 @@ function registerEvent(eventName) {
 }
 
 // HELPERS
-function email() {
+function getEmail() {
   return document.getElementById("email").value;
 }
 
-function pass() {
-  return document.getElementById("password").value; // ✅ FIXED
+function getPassword() {
+  return document.getElementById("password").value;
 }
 
 function setStatus(msg) {
