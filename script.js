@@ -1,4 +1,12 @@
-// Replace with your Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyAlKTvhP2_xiNTxalQnzlazWvXlnUa6i6A",
+  authDomain: "moneyplant-35a61.firebaseapp.com",
+  projectId: "moneyplant-35a61"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -9,7 +17,32 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Signup
+function signup() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => setStatus("User created ✅"))
+    .catch(err => setStatus(err.message));
+}
+
+function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => setStatus("Logged in ✅"))
+    .catch(err => setStatus(err.message));
+}
+
+function logout() {
+  auth.signOut();
+  setStatus("Logged out ❌");
+}
+
+function setStatus(msg) {
+  document.getElementById("status").innerText = msg;
+}
 function signup() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
