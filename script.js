@@ -44,3 +44,30 @@ function getPass() {
 function setStatus(msg) {
   document.getElementById("status").innerText = msg;
 }
+ 
+function loadEvents() {
+  db.collection("events").onSnapshot(snapshot => {
+    let html = "";
+
+    snapshot.forEach(doc => {
+      const e = doc.data();
+
+      html += `
+        <div class="card" data-name="${e.name}">
+          <h3>${e.name}</h3>
+          <p>${e.date}</p>
+        </div>
+      `;
+    });
+
+    document.getElementById("events").innerHTML = html;
+
+    // ✅ MAKE CARDS CLICKABLE (THIS IS IMPORTANT)
+    document.querySelectorAll(".card").forEach(card => {
+      card.addEventListener("click", function () {
+        const name = this.getAttribute("data-name");
+        openEvent(name);
+      });
+    });
+  });
+}
